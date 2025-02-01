@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        require-authentication="anonymous-all">
+
+
+<!--    createProduct-->
+    <transition name="createProduct">
+        <actions>
+            <service-call name="create#Product" in-map="context" out-map="context"/>
+        </actions>
+        <default-response url="."/>
+    </transition>
+
+<!--    createProductPrice-->
+    <transition name="createProductPrice">
+        <actions>
+            <service-call name="create#ProductPrice" in-map="context" out-map="context"/>
+        </actions>
+        <default-response url="."/>
+    </transition>
+
+<!--    createProductFeature-->
+    <transition name="createProductDimension">
+        <actions>
+            <service-call name="create#ProductDimension" in-map="context" out-map="context"/>
+        </actions>
+        <default-response url="."/>
+    </transition>
+
+<!--    createProductContent-->
+    <transition name="createProductContent">
+        <actions>
+            <service-call name="create#ProductContent" in-map="context" out-map="context"/>
+        </actions>
+        <default-response url="."/>
+    </transition>
+
+<!--    createProductAssoc-->
+    <transition name="createProductAssoc">
+        <actions>
+            <service-call name="create#ProductAssoc" in-map="context" out-map="context"/>
+        </actions>
+        <default-response url="."/>
+    </transition>
+
+    <widgets>
+        <container-dialog id="product" button-text="createProduct">
+            <form-single name="Product" transition="createProduct">
+                <auto-fields-entity entity-name="custom.udm.Product" include="nonpk" field-type="edit"/>
+                <field name="submitButton"><default-field title="Create"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+        <container-dialog id="price" button-text="createProductPrice">
+            <form-single name="ProductPrice" transition="createProductPrice">
+                <auto-fields-entity entity-name="custom.udm.ProductPrice" include="nonpk" field-type="edit"/>
+                <field name="submitButton"><default-field title="Create"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+        <!--    createProductDimension-->
+        <container-dialog id="dimension" button-text="createProductDimension">
+            <form-single name="ProductDimension" transition="createProductDimension">
+                <auto-fields-entity entity-name="custom.udm.ProductDimension"  field-type="edit"/>
+                <field name="submitButton"><default-field title="Create"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+        <!--    createProductContent-->
+        <container-dialog id="content" button-text="createProductContent">
+            <form-single name="ProductContent" transition="createProductContent">
+                <auto-fields-entity entity-name="custom.udm.ProductContent" include="nonpk" field-type="edit"/>
+                <field name="submitButton"><default-field title="Create"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+        <!--    createProductAssoc-->
+        <container-dialog id="assoc" button-text="createProductAssoc">
+            <form-single name="ProductAssoc" transition="createProductAssoc">
+                <auto-fields-entity entity-name="custom.udm.ProductAssoc" field-type="edit"/>
+                <field name="submitButton"><default-field title="Create"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+
+    </widgets>
+</screen>
