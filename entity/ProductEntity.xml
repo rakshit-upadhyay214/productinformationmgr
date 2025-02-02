@@ -2,21 +2,35 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
 
-    <entity entity-name="Product" package="custom.udm" sequence-primary-prefix="PROD">
+    <entity entity-name="Product" package="custom.udm" sequence-primary-prefix="PROD" authorize-skip="true">
         <field name="productId" type="id" is-pk="true"/>
         <field name="productName" type="text-medium"/>
         <field name="productTypeEnumId" type="id"/>
         <field name="isVariant" type="text-indicator"/>
         <field name="isVirtual" type="text-indicator"/>
-        <relationship type="many" related="custom.udm.ProductContent" short-alias="content"/>
-        <relationship type="many" related="custom.udm.ProductDimension" short-alias="dimension"/>
-        <relationship type="many" related="custom.udm.ProductPrice" short-alias="price"/>
-        <relationship type="many" related="custom.udm.ProductAssoc" short-alias="association"/>
+        <relationship type="many" related="custom.udm.ProductContent" short-alias="content">
+            <key-map field-name="productId"/>
+        </relationship>
+        <relationship type="many" related="custom.udm.ProductDimension" short-alias="dimension">
+            <key-map field-name="productId"/>
+        </relationship>
+        <relationship type="many" related="custom.udm.ProductPrice" short-alias="price">
+            <key-map field-name="productId"/>
+        </relationship>
+        <relationship type="many" related="custom.udm.ProductAssoc" short-alias="association">
+            <key-map field-name="productId"/>
+        </relationship>
         <relationship type="many" related="custom.udm.ProductAssoc" title="To">
             <key-map field-name="productId" related="toProductId"/>
         </relationship>
         <relationship type="one" related="moqui.basic.Enumeration" title="ProductType">
             <key-map field-name="productTypeEnumId"/>
+        </relationship>
+        <relationship type="many" related="custom.udm.ProductFeatureAppl" short-alias="feature">
+            <key-map field-name="productId"/>
+        </relationship>
+        <relationship type="many" related="custom.udm.ProductCategoryMember" short-alias="category">
+            <key-map field-name="productId"/>
         </relationship>
         <seed-data>
             <moqui.basic.EnumerationType description="Product Type" enumTypeId="ProductType"/>
@@ -29,11 +43,17 @@
             <moqui.basic.Enumeration description="Virtual (with variants)" enumId="PtVirtual" enumTypeId="ProductType"/>
             <moqui.basic.Enumeration description="Marketing Package Pick Assembly" enumId="PtMarketingPackage" enumTypeId="ProductType"/>
             <moqui.basic.Enumeration description="Configurable Good" enumId="PtConfigurable" enumTypeId="ProductType"/>
-
         </seed-data>
+        <master>
+            <detail relationship="content"/>
+            <detail relationship="dimension"/>
+            <detail relationship="price"/>
+            <detail relationship="association"/>
+            <detail relationship="feature"/>
+        </master>
     </entity>
 
-    <entity entity-name="ProductContent" package="custom.udm" sequence-primary-prefix="CON">
+    <entity entity-name="ProductContent" package="custom.udm" sequence-primary-prefix="CON" authorize-skip="true">
         <field name="productContentId" type="id" is-pk="true"/>
         <field name="productId" type="id"/>
         <field name="productContentTypeEnumId" type="id"/>
@@ -58,7 +78,7 @@
         </seed-data>
     </entity>
 
-    <entity entity-name="ProductDimension" package="custom.udm">
+    <entity entity-name="ProductDimension" package="custom.udm" authorize-skip="true">
         <field name="productId" type="id" is-pk="true"/>
         <field name="dimensionTypeEnumId" type="id" is-pk="true"/>
         <field name="dimensionValue" type="number-decimal"/>
@@ -80,7 +100,7 @@
         </seed-data>
     </entity>
 
-    <entity entity-name="ProductPrice" package="custom.udm" sequence-primary-prefix="PRC_">
+    <entity entity-name="ProductPrice" package="custom.udm" sequence-primary-prefix="PRC_" authorize-skip="true">
         <field name="productPriceId" type="id" is-pk="true"/>
         <field name="productId" type="id"/>
         <field name="priceTypeEnumId" type="id"/>
@@ -108,7 +128,7 @@
 
     </entity>
 
-    <entity entity-name="ProductAssoc" package="custom.udm" sequence-primary-prefix="PRC_">
+    <entity entity-name="ProductAssoc" package="custom.udm" sequence-primary-prefix="PRC_" authorize-skip="true">
         <field name="productId" type="id" is-pk="true"/>
         <field name="toProductId" type="id" is-pk="true"/>
         <field name="productAssocTypeEnumId" type="id" is-pk="true"/>
@@ -140,7 +160,7 @@
         </seed-data>
     </entity>
 
-    <entity entity-name="ProductFeature" package="custom.udm">
+    <entity entity-name="ProductFeature" package="custom.udm" authorize-skip="true">
         <field name="productFeatureId" type="id" is-pk="true"/>
         <field name="productFeatureTypeEnumId" type="id"/>
         <field name="description" type="text-medium"/>
@@ -159,9 +179,12 @@
             <moqui.basic.Enumeration description="Style" enumId="PftStyle" enumTypeId="ProductFeatureType"/>
             <moqui.basic.Enumeration description="Brand" enumId="PftBrand" enumTypeId="ProductFeatureType"/>
         </seed-data>
+        <master name="feature">
+            <detail relationship="featureappl"/>
+        </master>
     </entity>
 
-    <entity entity-name="ProductFeatureAppl" package="custom.udm">
+    <entity entity-name="ProductFeatureAppl" package="custom.udm" authorize-skip="true">
         <field name="productId" type="id" is-pk="true"/>
         <field name="productFeatureId" type="id" is-pk="true"/>
         <field name="applTypeEnumId" type="id"/>
@@ -182,11 +205,11 @@
     </entity>
 
 
-    <entity entity-name="ProductCategory" package="custom.udm">
+    <entity entity-name="ProductCategory" package="custom.udm" authorize-skip="true">
         <field name="productCategoryId" type="id" is-pk="true"/>
         <field name="productCategoryTypeEnumId" type="id"/>
         <field name="categoryName" type="id"/>
-        <relationship type="many" related="custom.udm.ProductCategoryMember">
+        <relationship type="many" related="custom.udm.ProductCategoryMember" short-alias="categorymember">
             <key-map field-name="productCategoryId"/>
         </relationship>
         <relationship type="one" related="moqui.basic.Enumeration" title="ProductCategoryType">
@@ -202,10 +225,13 @@
             <moqui.basic.Enumeration description="Gift Card" enumId="PctGiftCard" enumTypeId="ProductCategoryType"/>
             <moqui.basic.Enumeration description="Best Selling" enumId="PctBestSelling" enumTypeId="ProductCategoryType"/>
         </seed-data>
+        <master name="category">
+            <detail relationship="categorymember"/>
+        </master>
      </entity>
 
 
-    <entity entity-name="ProductCategoryMember" package="custom.udm">
+    <entity entity-name="ProductCategoryMember" package="custom.udm" authorize-skip="true">
         <field name="productCategoryId" type="id" is-pk="true"/>
         <field name="productId" type="id" is-pk="true"/>
         <field name="fromDate" type="date" is-pk="true"/>

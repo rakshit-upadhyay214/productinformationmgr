@@ -7,7 +7,7 @@
 <!--    createProduct-->
     <transition name="createProduct">
         <actions>
-            <service-call name="create#Product" in-map="context" out-map="context"/>
+            <service-call name="create#Product" in-map="context" out-map="context" />
         </actions>
         <default-response url="."/>
     </transition>
